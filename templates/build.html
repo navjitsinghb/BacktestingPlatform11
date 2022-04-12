@@ -1,0 +1,56 @@
+{% load static %}
+<link rel="stylesheet"  href="{%  static  'css/tailwind.css'  %}">
+<link rel="stylesheet"  href="{%  static  'css/custom.css'  %}">
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static 'css/editor.css' %}">
+    </head>
+    <body>
+        {% include "./components/navbar.html" %}
+        <div style="background-color: #131428; " class="h-screen"> 
+    
+    {% comment %} <div class="header"> Codeboard Online IDE </div> {% endcomment %}
+    <div style="background-color: #131428; " class="control-panel flex items-center justify-between p-4">
+        <div>
+            <p class="text-white">Code editor</p>
+        </div>
+        <div class="flex items-center">
+        <p class="text-white mr-4">Select Language:</p>
+        
+        <select id="languages" class="languages" onchange="changeLanguage()">
+            <option value="c"> C </option>
+            <option value="python"> Python </option>
+            <option value="cpp"> C++ </option>
+            <option value="php"> PHP </option>
+            <option value="node"> Node JS </option>
+        </select>
+         <button onclick="executeCode()" class="mx-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Test Script
+        </button>
+        <button  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Save Script
+        </button>
+        </div>
+    </div>
+    <div class="editor" id="editor"></div>
+
+    {% comment %} <div class="button-container">
+        <button class="btn" onclick="executeCode()"> Run </button>
+    </div> {% endcomment %}
+
+    <div class="bg-white output"></div>
+        </div>
+        {% include "./components/footer.html" %}
+        <script src="" async defer></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{%  static 'js/lib/ace.js' %}"></script>
+    <script src="{%  static 'js/lib/theme-monokai.js' %}"></script>
+    <script src="{% static 'js/ide.js' %}"></script>
+    </body>
+</html>

@@ -1,0 +1,52 @@
+{% load static %}
+<link rel="stylesheet"  href="{%  static  'css/tailwind.css'  %}">
+<link rel="stylesheet"  href="{%  static  'css/custom.css'  %}">
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        {% include "./components/navbar.html" %}
+        <div style="background-color: #1E2023;" class="h-screen"> 
+    <h1 class="text-white text-2xl ml-4">My Algos</h1>
+
+            {% if not table_data %}
+    <div class="flex justify-center items-center flex-col "> 
+    <p class="text-white text-2xl">There are no task entries to display.</p>
+    <a href="/build">
+    <button  class="bg-blue-500 mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Build Script
+        </button>
+    </a>
+    </div>
+    {% else %}
+            <div class="container mt-4 mx-auto">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      
+        <div class="card m-2 cursor-pointer border bg-white border-gray-400 rounded-lg hover:shadow-md hover:border-opacity-0 transform hover:-translate-y-1 transition-all duration-200">
+        <div class="m-3">
+          <h2 class="text-lg mb-2 text-black">Title
+         <span class="text-sm text-teal-800 font-mono bg-teal-100 inline rounded-full px-2 align-top float-right animate-pulse">Tag</span></h2>
+        <p class="font-light font-mono text-sm text-gray-700 hover:text-gray-900 transition-all duration-200">Space, the final frontier. These are the voyages of the Starship Enterprise. Its five-year mission: to explore strange new worlds.</p>
+        </div>
+      </div>
+
+       
+
+    </div>
+  </div>
+
+ {% endif %}
+</div>
+            {% comment %} end algo card   {% endcomment %}
+       
+        {% include "./components/footer.html" %}
+        <script src="" async defer></script>
+    </body>
+</html>

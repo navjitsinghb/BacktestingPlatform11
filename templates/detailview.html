@@ -1,0 +1,126 @@
+{% load static %}
+<link rel="stylesheet"  href="{%  static  'css/tailwind.css'  %}">
+<link rel="stylesheet"  href="{%  static  'css/custom.css'  %}">
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+    <title>Detail View</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		 <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+	</head>
+    {% include "./components/navbar.html" %}
+	<body  style="background-color: #131428; " class="leading-normal tracking-normal">
+  <div class="container p-4"> 
+  <div class="flex justify-between">
+    <div>
+  <h1 class="text-white text-5xl">{{stock.companyName}} Inc </h1>
+  <p class="text-white mt-2">Ticker: {{amount}} {{stock.companyName}}</p>
+    </div>
+	<h1 class="text-white text-5xl">$122.21</h1>
+    </div>
+    <div class="flex justify-center">
+    <div style="max-width:500px; min-width: 150px; height:300px;" class="my-chart"></div>
+		</div>
+    <div class="flex justify-between"> 
+      <ul class="flex">
+        <li class="text-white mx-2 cursor-pointer">1D</li>
+        <li class="text-white mx-2 cursor-pointer">1W</li>
+        <li class="text-white mx-2 cursor-pointer">1M</li>
+        <li class="text-white mx-2 cursor-pointer">1Y</li>
+      </ul>
+      <div> 
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Upload Script
+        </button>
+      </div>
+    </div>
+    </div>
+        {% include "./components/footer.html" %}
+        <script>
+          
+            /* Add a basic data series with six labels and values */
+var data = {
+  labels: ['M', 'T', 'W', 'TH', 'F', 'S'],
+  series: [
+    [5, 4, 3, 7, 5, 10, 2, 11, 23, 1],
+    
+  ]
+};
+
+// We are setting a few options for our chart and override the defaults
+var options = {
+  // Don't draw the line chart points
+  showPoint: false,
+   showArea: true,
+  // Disable line smoothing
+  lineSmooth: true,
+  // X-Axis specific configuration
+  axisX: {
+    // We can disable the grid for this axis
+    showGrid: false,
+    // and also don't show the label
+    showLabel: false
+  },
+  // Y-Axis specific configuration
+  axisY: {
+    // Lets offset the chart a bit from the labels
+    offset: 60,
+    showLabel: false
+    // The label interpolation function enables you to modify the values
+    // used for the labels on each axis. Here we are converting the
+    // values into million pound.
+    //labelInterpolationFnc: function(value) {
+    //  return '$' + value + 'm';
+   // }
+  }
+};
+
+// All you need to do is pass your configuration as third parameter to the chart function
+new Chartist.Line('.my-chart', data, options);
+
+
+            /* Add a basic data series with six labels and values */
+var data = {
+  labels: ['M', 'T', 'W', 'TH', 'F', 'S'],
+  series: [
+    [5, 4, 3, 7, 5, 10, 2, 11, 23, 1],
+    
+  ]
+};
+
+// We are setting a few options for our chart and override the defaults
+var options = {
+  // Don't draw the line chart points
+  showPoint: false,
+   showArea: true,
+  // Disable line smoothing
+  lineSmooth: true,
+  // X-Axis specific configuration
+  axisX: {
+    // We can disable the grid for this axis
+    showGrid: false,
+    // and also don't show the label
+    showLabel: false
+  },
+  // Y-Axis specific configuration
+  axisY: {
+    // Lets offset the chart a bit from the labels
+    offset: 60,
+    showLabel: false
+    // The label interpolation function enables you to modify the values
+    // used for the labels on each axis. Here we are converting the
+    // values into million pound.
+    //labelInterpolationFnc: function(value) {
+    //  return '$' + value + 'm';
+   // }
+  }
+};
+
+// All you need to do is pass your configuration as third parameter to the chart function
+new Chartist.Line('.my-chart2', data, options);
+        </script>
+	</body>
+</html>
