@@ -16,23 +16,3 @@ function changeLanguage() {
     else if(language == 'node')editor.session.setMode("ace/mode/javascript");
 }
 
-function executeCode() {
-    let output = editor.getSession().getValue();
-    console.log("this is the output", output);
-    console.log(typeof output);
-    // $.ajax({
-
-    //     url: "/ide/app/compiler.php",
-
-    //     method: "POST",
-
-    //     data: {
-    //         language: $("#languages").val(),
-    //         code: editor.getSession().getValue()
-    //     },
-
-    //     success: function(response) {
-    //         $(".output").text(response)
-    //     }
-    // })
-}

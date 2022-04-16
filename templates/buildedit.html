@@ -14,37 +14,42 @@
     </head>
     <body>
         {% include "./components/navbar.html" %}
+        
         <div style="background-color: #131428; " class="h-screen"> 
     
     {% comment %} <div class="header"> Codeboard Online IDE </div> {% endcomment %}
+    {% for e in edits %}
+    
     <div style="background-color: #131428; " class="control-panel flex items-center justify-between p-4">
         <div>
-            <p class="text-white">Code editor</p>
+            <p class="text-white">{{e.title}} </p>
         </div>
         <div class="flex items-center">
-        <p class="text-white mr-4">Select Language:</p>
-        
-        <select id="languages" class="languages" onchange="changeLanguage()">
-            <option value="c"> C </option>
-            <option value="python"> Python </option>
-            <option value="cpp"> C++ </option>
-            <option value="php"> PHP </option>
-            <option value="node"> Node JS </option>
-        </select>
-         <button onclick="executeCode()" class="mx-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Test Script
-        </button>
-        <button onclick="executeCode()"  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Save Script
-        </button>
+            <p class="text-white mr-4">Select Language:</p>
+            
+            <select id="languages" class="languages" onchange="changeLanguage()">
+                <option value="c"> C </option>
+                <option value="python"> Python </option>
+                <option value="cpp"> C++ </option>
+                <option value="php"> PHP </option>
+                <option value="node"> Node JS </option>
+            </select>
+            <button onclick="executeCode()" class="mx-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Test Script
+            </button>
+            <button onclick="executeCode()"  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Save Script
+            </button>
         </div>
     </div>
     <div class="editor" id="editor"></div>
+    {% endfor %}
 
     {% comment %} <div class="button-container">
         <button class="btn" onclick="executeCode()"> Run </button>
     </div> {% endcomment %}
     <script>
+        console.log("edit ", {{amount}})
         function executeCode() {
     let output = editor.getSession().getValue();
     console.log("this is the output", output);

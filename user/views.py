@@ -62,3 +62,6 @@ def user_logout(request):
     logout(request)
     # Return to homepage.
     return redirect("/")
+
+def favorites(request):
+    return render(request, "favorites.html")
