@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'django_browser_reload',
     'user',
     'build',
-    'documentation'
+    'documentation',
+    'crypto'
 ]
 
 MIDDLEWARE = [
@@ -77,6 +78,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'base.wsgi.application'
 
+CELERY_BROKER_URL = 'redis://localhost:6379'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

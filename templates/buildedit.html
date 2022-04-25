@@ -49,7 +49,16 @@
         <button class="btn" onclick="executeCode()"> Run </button>
     </div> {% endcomment %}
     <script>
-        console.log("edit ", {{amount}})
+    
+function initailize() {
+
+editor.getSession().getValue();
+console.log("trying to insert");
+}
+initailize();
+
+
+
         function executeCode() {
     let output = editor.getSession().getValue();
     console.log("this is the output", output);

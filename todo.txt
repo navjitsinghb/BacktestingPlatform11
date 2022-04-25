@@ -1,0 +1,7 @@
+- be able to update scripts 
+- show crypto prices list  
+- show stock prices list  
+-show detail of crypto price 
+-show stock prices detail  
+  
+how to run the redis celery instance 

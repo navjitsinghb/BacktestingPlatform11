@@ -13,14 +13,19 @@
 	</head>
     {% include "./components/navbar.html" %}
 	<body  style="background-color: #131428; " class="leading-normal tracking-normal">
-    {% for s in stock %}
-  <div class="container p-4"> 
+  {% for c in coin %}
+        <div class="container p-4"> 
   <div class="flex justify-between">
+    <div class="flex">
     <div>
-  <h1 class="text-white text-5xl">{{s.companyName}} Inc </h1>
-  <p class="text-white mt-2">Ticker: {{amount}} {{s.companyName}}</p>
+        <img class="w-16 mr-4" src={{c.image}}/> 
     </div>
-	<h1 class="text-white text-5xl">$122.21</h1>
+        <div>
+            <h1 class="text-white text-5xl">{{c.name}} </h1>
+            <p class="text-white mt-2">Ticker: {{c.symbol}}</p>
+        </div>
+    </div>
+	<h1 class="text-white text-5xl">${{c.price}}</h1>
     </div>
     <div class="flex justify-center">
     <div style="max-width:500px; min-width: 150px; height:300px;" class="my-chart"></div>
@@ -33,12 +38,9 @@
         <li class="text-white mx-2 cursor-pointer">1Y</li>
       </ul>
       <div> 
-        <form method="POST">
-          {% csrf_token %}
-        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
         Upload Script
-        </form>
-        <a/>
+        </button>
       </div>
     </div>
     </div>
