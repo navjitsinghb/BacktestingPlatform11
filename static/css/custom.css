@@ -1,15 +1,8 @@
-.circle {
-    width: 10px;
-    height: 10px;
-    background-color: red;
-    transform: rotate(45deg);
-}
 
-.my-char {
-    /* Set the colour of this series line */
-    stroke: green;
-    /* Control the thikness of your lines */
-    stroke-width: 5px;
-    /* Create a dashed line with a pattern */
-    stroke-dasharray: 10px 20px;
+
+#chart {
+    background: transparent;
+    color: #67809f;
+    width: 1000px;
+    height: 1000px;
 }

@@ -1,56 +1,4 @@
-{% load static %}
-<link rel="stylesheet"  href="{%  static  'css/tailwind.css'  %}">
-<link rel="stylesheet"  href="{%  static  'css/custom.css'  %}">
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-    <title>Detail View</title>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta http-equiv="X-UA-Compatible" content="ie=edge">
-		 <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
-    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3-fetch@3"></script>
-
-	</head>
-    {% include "./components/navbar.html" %}
-	<body  style="background-color: #131428; " class="leading-normal tracking-normal">
-    
-  <div class="container p-4"> 
-  <div class="flex justify-between">
-    <div>
-  <h1 class="text-white text-5xl">{{stock.companyName}} Inc </h1>
-  <p class="text-white mt-2">Ticker: {{amount}} {{stock.companyName}}</p>
-    </div>
-	<h1 class="text-white text-5xl">$122.21</h1>
-    </div>
-    <div class="flex justify-center">
-    <div style="max-width:1000px; min-width: 150px; height:500px;" class="my-chart"></div>
-      <div id="chart"></div>
-		</div>
-    <div class="flex justify-between"> 
-      <ul class="flex">
-        <li class="text-white mx-2 cursor-pointer">1M</li>
-        <li class="text-white mx-2 cursor-pointer">1Y</li>
-        <li class="text-white mx-2 cursor-pointer">2Y</li>
-      </ul>
-      <div> 
-        <form method="POST">
-          {% csrf_token %}
-        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Upload Script
-        </form>
-        <a/>
-      </div>
-    </div>
-    </div>
-    
-        {% include "./components/footer.html" %}
-    <script>
-
-
-  const loadData = d3.json("{% static 'js/sample-data.json' %}").then((data) => {
+const loadData = d3.json("sample-data.json").then((data) => {
   const chartResultsData = data["chart"]["result"][0];
   const quoteData = chartResultsData["indicators"]["quote"][0];
 
@@ -360,8 +308,3 @@ const initialiseChart = (data) => {
   svg.append('g').call(d3.axisLeft(yVolumeScale));
   */
 };
-
-    </script>
-      
-	</body>
-</html>

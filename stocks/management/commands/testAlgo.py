@@ -18,11 +18,12 @@ class Command(BaseCommand):
         start = dt.datetime(startyear,startmonth,startday)
         now = dt.datetime.now()
         df=pdr.get_data_yahoo(stock,start,now)
+        print(df)
         emasUsed=[3,5,8,10,12,15,30,35,40,45,50,60]
         for x in emasUsed:
             ema=x
             df["Ema_"+str(ema)]=round(df.iloc[:,4].ewm(span=ema,adjust=False).mean(),2)
-        print(df.tail())
+        # print(df.tail())
         pos=0 
         num=0  
         percentchange=[]
@@ -35,30 +36,30 @@ class Command(BaseCommand):
             close = df["Adj Close"][i]
 
             if(cmin > cmax):
-                print("Red White Blue")
+                # print("Red White Blue")
                 if(pos == 0):
                     bp = close
                     pos = 1
-                    print("Buying now at "+str(bp))
+                    # print("Buying now at "+str(bp))
 
             elif(cmin < cmax):
-                print("Blue White Red")
+                # print("Blue White Red")
                 if(pos == 1):
                     pos = 0
                     sp = close
-                    print("Selling now at "+str(sp))
+                    # print("Selling now at "+str(sp))
                     pc = (sp/bp-1)*100
                     percentchange.append(pc)
             if(num == df["Adj Close"].count()-1 and pos == 1):
                 pos = 0
                 sp = close
-                print("Selling now at "+str(sp))
+                # print("Selling now at "+str(sp))
                 pc = (sp/bp-1)*100
                 percentchange.append(pc)
         num += 1
 
 
-        print(percentchange)
+        # print(percentchange)
         gains = 0
         ng = 0
         losses = 0
@@ -97,19 +98,19 @@ class Command(BaseCommand):
         else:
             battingAvg = 0
 
-        print()
-        print("Results for " + stock + " going back to " +
-            str(df.index[0])+", Sample size: "+str(ng+nl)+" trades")
-        print("EMAs used: "+str(emasUsed))
-        print("Batting Avg: " + str(battingAvg))
-        print("Gain/loss ratio: " + ratio)
-        print("Average Gain: " + str(avgGain))
-        print("Average Loss: " + str(avgLoss))
-        print("Max Return: " + maxR)
-        print("Max Loss: " + maxL)
-        print("Total return over "+str(ng+nl) + " trades: " + str(totalR)+"%")
-        #print("Example return Simulating "+str(n)+ " trades: "+ str(nReturn)+"%" )
-        print()
+        # print()
+        # print("Results for " + stock + " going back to " +
+        #     str(df.index[0])+", Sample size: "+str(ng+nl)+" trades")
+        # print("EMAs used: "+str(emasUsed))
+        # print("Batting Avg: " + str(battingAvg))
+        # print("Gain/loss ratio: " + ratio)
+        # print("Average Gain: " + str(avgGain))
+        # print("Average Loss: " + str(avgLoss))
+        # print("Max Return: " + maxR)
+        # print("Max Loss: " + maxL)
+        # print("Total return over "+str(ng+nl) + " trades: " + str(totalR)+"%")
+        # #print("Example return Simulating "+str(n)+ " trades: "+ str(nReturn)+"%" )
+        # print()
 
 
         # ma=50

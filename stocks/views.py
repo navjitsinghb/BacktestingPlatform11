@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
-from .models import Stock
+from .models import Stock, StockPrice
 import pandas as pd
 import numpy as np
 import yfinance as yf
@@ -8,6 +8,8 @@ import datetime as dt
 from pandas_datareader import data as pdr
 import requests
 # Create your views here.
+
+
 def home(request):
     # r = requests.get('https://api.polygon.io/v2/aggs/ticker/AAPL/range/1/day/2021-07-22/2021-07-22?adjusted=true&sort=asc&limit=120&apiKey=hbJiRLJtmp4m3obtdFF_gtWOY08wxhPx')
     # print('greger',r.content)
@@ -17,18 +19,22 @@ def home(request):
         "stocks": stocks,
         "amount": amount
     }
-    return render(request, 'index.html', context) 
+    return render(request, 'index.html', context)
+
 
 def detail(request, id):
-    detailStock = Stock.objects.filter(id=id)
+    detailStock = Stock.objects.get(id=id)
     print(detailStock)
+    stockprices = StockPrice.objects.filter(stock=detailStock)
+    print(stockprices)
     if (request.method == "POST"):
         BackTest(detailStock)
     context = {
-    "stock" : detailStock,
-    "amount": 1
+        "stock": detailStock,
+        "stockprices": stockprices,
+        "amount": 1
     }
-    return render(request, 'detailview.html',context) 
+    return render(request, 'detailview.html', context)
 
 
 def BackTest(detailStock):
@@ -47,14 +53,17 @@ def BackTest(detailStock):
     emasUsed = [3, 5, 8, 10, 12, 15, 30, 35, 40, 45, 50, 60]
     for x in emasUsed:
         ema = x
-        df["Ema_"+str(ema)] = round(df.iloc[:,4].ewm(span=ema, adjust=False).mean(), 2)
+        df["Ema_"+str(ema)] = round(df.iloc[:,
+                                            4].ewm(span=ema, adjust=False).mean(), 2)
     # print(df.tail())
     pos = 0
     num = 0
     percentchange = []
     for i in df.index:
-        cmin = min(df["Ema_3"][i], df["Ema_5"][i], df["Ema_8"][i], df["Ema_10"][i], df["Ema_12"][i], df["Ema_15"][i],)
-        cmax = max(df["Ema_30"][i], df["Ema_35"][i], df["Ema_40"][i],df["Ema_45"][i], df["Ema_50"][i], df["Ema_60"][i],)
+        cmin = min(df["Ema_3"][i], df["Ema_5"][i], df["Ema_8"][i],
+                   df["Ema_10"][i], df["Ema_12"][i], df["Ema_15"][i],)
+        cmax = max(df["Ema_30"][i], df["Ema_35"][i], df["Ema_40"]
+                   [i], df["Ema_45"][i], df["Ema_50"][i], df["Ema_60"][i],)
         close = df["Adj Close"][i]
         if(cmin > cmax):
             print("Red White Blue")
@@ -118,7 +127,8 @@ def BackTest(detailStock):
         battingAvg = 0
 
     print()
-    print("Results for " + stock + " going back to " + str(df.index[0])+", Sample size: "+str(ng+nl)+" trades")
+    print("Results for " + stock + " going back to " +
+          str(df.index[0])+", Sample size: "+str(ng+nl)+" trades")
     print("EMAs used: "+str(emasUsed))
     print("Batting Avg: " + str(battingAvg))
     print("Gain/loss ratio: " + ratio)
@@ -132,6 +142,6 @@ def BackTest(detailStock):
 
     testContext = {
         "ResultStatement": "Results for " + stock + " going back to " + str(df.index[0])+", Sample size: "+str(ng+nl)+" trades",
-    
+
     }
     return testContext
