@@ -12,7 +12,7 @@
     <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/d3-fetch@3"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	</head>
     {% include "./components/navbar.html" %}
 	<body  style="background-color: #131428; " class="leading-normal tracking-normal">
@@ -23,7 +23,7 @@
   <h1 class="text-white text-5xl">{{stock.companyName}} Inc </h1>
   <p class="text-white mt-2">Ticker: {{amount}} {{stock.companyName}}</p>
     </div>
-	<h1 class="text-white text-5xl">$122.21</h1>
+	<h1 class="text-white text-5xl">${{mostRecent.close}}</h1>
     </div>
     <div class="flex justify-center">
     <div style="max-width:1000px; min-width: 150px; height:500px;" class="my-chart"></div>
@@ -36,19 +36,119 @@
         <li class="text-white mx-2 cursor-pointer">2Y</li>
       </ul>
       <div> 
-        <form method="POST">
-          {% csrf_token %}
-        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Upload Script
+         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="toggleModal('modal-id')">
+        Toggle Model
         </form>
+        
         <a/>
       </div>
     </div>
     </div>
+    <div class="hidden overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center" id="modal-id">
+  <div class="relative w-auto my-6 mx-auto max-w-3xl">
+    <!--content-->
+    <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+      <!--header-->
+      <div class="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+        <h3 class="text-3xl font-semibold">
+        My Algorithms
+        </h3>
+        <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" onclick="toggleModal('modal-id')">
+          <span class="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+            ×
+          </span>
+        </button>
+      </div>
+      <!--body-->
+     {% if not scripts %}
+    <div class="flex justify-center items-center flex-col "> 
+    <p class="text-white text-2xl">There are no task entries to display.</p>
+    <a href="/build">
+    <button  class="bg-blue-500 mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Build Script
+        </button>
+    </a>
+    </div>
+    {% else %}
+            <div class="container mt-4 mx-auto">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {% for script in scripts %}
+        <a >
+        <div id="myElement{{script.id}}" onclick="changeStyle('myElement{{script.id}}',{{script.id}})" class="card m-2 cursor-pointer border bg-white border-gray-400 rounded-lg hover:shadow-md hover:border-opacity-0 transform hover:-translate-y-1 transition-all duration-200">
+        <div class="m-3">
+          <h2 class="text-lg mb-2 text-black">{{script.title}}
+         <span class="text-sm text-teal-800 font-mono bg-teal-100 inline rounded-full px-2 align-top float-right animate-pulse">Tag</span></h2>
+        <p class="font-light font-mono text-sm text-gray-700 hover:text-gray-900 transition-all duration-200">{{script.code}}</p>
+        </div>
+      </div>
+    </a>
+      {% endfor %}
+    </div>
+  </div>
+
+ {% endif %}
+      <!--footer-->
+      <div class="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+        <button class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" onclick="toggleModal('modal-id')">
+          Close
+        </button>
+        
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded" onclick="testAlgo()">
+        Upload Script
+        </button>
+       
+      </div>
+    </div>
+  </div>
+</div>
+<div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="modal-id-backdrop"></div>
     
         {% include "./components/footer.html" %}
+   
     <script>
+      let algoToggled = null;
 
+ function testAlgo(){
+   console.log("sending Test Algo")
+      $(document).ready(function () {
+    $.ajax({
+      type: "POST",
+      url: "/detail/{{stock.id}}/",
+      data: {
+        'video': "gwg"  // from form
+      },
+      success: function () {
+        console.log("Success")
+       // $('#message').html("<h2>Contact Form Submitted!</h2>")
+      }
+    });
+    return false; //<---- move it here
+});
+}
+
+
+
+       function changeStyle(divToChange,id){
+         let amount = {{scriptsAmount}}
+       //  for(let i=1; i <= amount;i++){
+      //     console.log("myElement"+ i)
+       //   var miso = document.getElementById("myElement"+ i)
+      //    miso.style.borderColor = "none";
+      //  }
+        var element = document.getElementById(divToChange);
+        element.style.borderColor = "red";
+        algoToggled = id;
+        console.log("algoToggled ",id) 
+        
+    }
+{% comment %} toggle model function   {% endcomment %}
+ function toggleModal(modalID){
+    document.getElementById(modalID).classList.toggle("hidden");
+    document.getElementById(modalID + "-backdrop").classList.toggle("hidden");
+    document.getElementById(modalID).classList.toggle("flex");
+    document.getElementById(modalID + "-backdrop").classList.toggle("flex");
+  }
+{% comment %} end toggle model function  {% endcomment %}
 
   const loadData = d3.json("{% static 'js/sample-data.json' %}").then((data) => {
   const chartResultsData = data["chart"]["result"][0];

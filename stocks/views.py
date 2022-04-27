@@ -6,7 +6,9 @@ import numpy as np
 import yfinance as yf
 import datetime as dt
 from pandas_datareader import data as pdr
+from build.models import Script
 import requests
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 
@@ -22,27 +24,32 @@ def home(request):
     return render(request, 'index.html', context)
 
 
+@csrf_exempt
 def detail(request, id):
     detailStock = Stock.objects.get(id=id)
     print(detailStock)
     stockprices = StockPrice.objects.filter(stock=detailStock)
-    print(stockprices)
+    scripts = Script.objects.filter(owner=request.user)
+    scriptsAmounts = scripts.count()
+    print(scriptsAmounts)
+    mostRecentPrice = StockPrice.objects.filter(stock=detailStock).last()
+    print(mostRecentPrice.close)
     if (request.method == "POST"):
         BackTest(detailStock)
     context = {
         "stock": detailStock,
         "stockprices": stockprices,
-        "amount": 1
+        "scriptsAmount": scriptsAmounts,
+        "scripts": scripts,
+        "mostRecent": mostRecentPrice
     }
     return render(request, 'detailview.html', context)
 
 
 def BackTest(detailStock):
     print(detailStock)
-    for d in detailStock:
-        ticker = "TSLA"
     yf.pdr_override()
-    stock = ticker
+    stock = detailStock.ticker
     print(stock)
     startyear = 2019
     startmonth = 1
