@@ -23,7 +23,7 @@ def home(request):
     }
     return render(request, 'index.html', context)
 
-
+#ggg
 @csrf_exempt
 def detail(request, id):
     detailStock = Stock.objects.get(id=id)
@@ -146,7 +146,6 @@ def BackTest(detailStock):
     print("Total return over "+str(ng+nl) + " trades: " + str(totalR)+"%")
     #print("Example return Simulating "+str(n)+ " trades: "+ str(nReturn)+"%" )
     print()
-
     testContext = {
         "ResultStatement": "Results for " + stock + " going back to " + str(df.index[0])+", Sample size: "+str(ng+nl)+" trades",
 
