@@ -16,10 +16,49 @@
   
 		
             
-			<div class="flex h-screen flex-col items-center mt-8  ">
-                <h1 class="text-5xl text-center text-white">The Ultimate Stock <br> Backtesting Platform</h1>
-				<p class="text-center text-white my-4">Test your Python algorithm against stocks and cryptos</p>
-
+			<div class="flex  flex-col items-center mt-8  ">
+         
+        <div class="flex  ">
+          <div class="m-8 hidden md:block">
+             <img style="height: 600px;" src="{% static 'images/PyHome.png' %}" />
+        </div>
+        <div>
+             <div class="flex flex-col m-8">
+                <h1 class="text-5xl -bold  text-white my-4">Launch yourself 
+into the world <br/>
+of python algorithm
+trading <br/> with 
+Pygorithm</h1>
+				<p class=" text-white my-4">Test your Python algorithm against stocks. Write custom python trading scripts and run them on your favorite 
+          stocks in the browser.
+        </p>
+            <div class="flex my-4">
+        <button type="button" class=" w-32 inline-block px-6 py-2.5 bg-white text-black font-medium text-xs 
+  leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 
+  ocus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg 
+  transition duration-150 ease-in-out">Get Started</button>
+  <button type="button" class=" mx-4 inline-block px-6 py-2.5 bg-white text-black font-medium text-xs 
+  leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 
+  ocus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg 
+  transition duration-150 ease-in-out">Documentation</button>
+            </div>
+      </div>
+      
+      <div class="  flex justify-left m-4 items-center">
+        <div>
+        <p class=" text-white mx-4 text-2xl font-bold">50+ Stocks</p>
+        </div>
+          <div style="width: 3px; height: 20px; background: #FFF;" class="seperator"></div>
+          <div>
+           <p class=" text-white mx-4 text-center text-2xl font-bold">10+ Algo Templates</p>
+          </div>
+          <div style="width: 3px; height: 20px; background: #FFF;" class="seperator"></div>
+          <div> 
+          <p class=" text-white mx-4 text-center text-2xl font-bold">1,000+ Users</p>
+        </div>
+      </div>
+    </div>
+  </div>
     <div style="background-color: #1E2023;"  class="container  max-w-lg  p-4 rounded">
                 {% include "./components/searchHome.html" %}
                 {% comment %} stock crpyto table   {% endcomment %}
@@ -28,42 +67,49 @@
     <div class="py-2 inline-block min-w-full sm:px-6 lg:px-2">
       <div class="overflow-x-auto">
         <table class="min-w-full">
+      
           
           <tbody>
               {% for stock in stocks %}
-              <div>
-              <a href="/detail/{{stock.id}}"> 
-              <tr class="hover:bg-gray-800 border-b flex justify-center items-center">
-              <td class="px-6 py-4 flex items-center  whitespace-nowrap text-sm font-medium text-white">
-                  <div class="circle mr-2"></div>
-                  <div>
-                 <p class="text-lg"> {{stock.companyName}} </p>
-                 <p class="text-xs text-gray-400 mt-1"> {{stock.companyName}} {{stock.id}} Inc.</p>
-                  </div>
+              
+             
+              <tr class="hover:bg-gray-800 border-b">
+              <td> 
+                <img class="" src="{% static 'images/stocks/' %}{{stock.logo}}" />
+              </td>
+              <td class="text-white"> 
+               {{stock.ticker}}
+              </td>
+              <td class="text-white">
+                    <p class=""> {{stock.companyName}} </p>
               </td>
               <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                 <div style="max-width:200px; min-width: 150px;" class="my-chart{{stock.id}}"></div>
               </td>
               <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                <p class="text-white">${{stock.close}}</p>
+                <p class="text-white">${{stock.mostRecentPrice}}</p>
               </td>
               <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                 <div class="flex space-x-2 justify-center">
             <a href="/detail/{{stock.id}}">
+              {% if user.is_authenticated %}
   <button type="button" class="inline-block px-6 py-2.5 bg-white text-black font-medium text-xs 
   leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 
   ocus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg 
   transition duration-150 ease-in-out">View</button>
+  {% else %}
+  <button type="button" class="inline-block px-6 py-2.5 bg-white text-black font-medium text-xs 
+  leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 
+  ocus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg 
+  transition duration-150 ease-in-out">Login To Test</button>
+  {% endif %}
             </a>
 </div>
               </td>
-              <td> 
-
-                <svg fill="white"  width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402m5.726-20.583c-2.203 0-4.446 1.042-5.726 3.238-1.285-2.206-3.522-3.248-5.719-3.248-3.183 0-6.281 2.187-6.281 6.191 0 4.661 5.571 9.429 12 15.809 6.43-6.38 12-11.148 12-15.809 0-4.011-3.095-6.181-6.274-6.181"/></svg>
-              </td>
+             
             </tr>
-        </a>
-    </div>
+       
+   
         {% endfor %}
           </tbody>
         </table>

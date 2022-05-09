@@ -1,16 +1,24 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Script
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def build(request):
     context = {}
     return render(request, "build.html", context)
 
+
+
+
+
+@login_required(login_url='/user/login')
 def myalgos(request):
     scripts = Script.objects.filter(owner=request.user)
     context = { "scripts": scripts }
     return render(request,"myalgos.html", context) 
 
+
+@login_required(login_url='/user/login')
 def postalgo(request):
 
     if (request.method == "POST"):
@@ -31,6 +39,8 @@ def postalgo(request):
 def useralgo(request):
     print("useralgos")
 
+
+@login_required(login_url='/user/login')
 def editalgo(request,id):
     
     edits = Script.objects.filter(id=id)

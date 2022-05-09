@@ -48,48 +48,48 @@
     {% comment %} <div class="button-container">
         <button class="btn" onclick="executeCode()"> Run </button>
     </div> {% endcomment %}
-    <script>
     
+    <div class="bg-white output"></div>
+</div>
+{% include "./components/footer.html" %}
+<script src="" async defer></script>
+
+<script src="{%  static 'js/lib/ace.js' %}"></script>
+<script src="{%  static 'js/lib/theme-monokai.js' %}"></script>
+<script src="{% static 'js/ide.js' %}"></script>
+<script>
+var js = ace.createEditSession("some js code");
+var css = ace.createEditSession(["some", "css", "code here"]);
+editor.setSession(js);
+
 function initailize() {
 
 editor.getSession().getValue();
 console.log("trying to insert");
 }
 initailize();
+    function executeCode() {
+let output = editor.getSession().getValue();
+console.log("this is the output", output);
+console.log(typeof output);
+var token = '{{csrf_token}}';
+$.ajax({
+     headers: { "X-CSRFToken": token },
+     url: "http://localhost:8000/build/postalgo",
 
+    method: "POST",
 
+data: {
+    "output": output,
+    "title": "analgo"
+//         language: $("#languages").val(),
+//         code: editor.getSession().getValue()
+     },
 
-        function executeCode() {
-    let output = editor.getSession().getValue();
-    console.log("this is the output", output);
-    console.log(typeof output);
-    var token = '{{csrf_token}}';
-    $.ajax({
-         headers: { "X-CSRFToken": token },
-         url: "http://localhost:8000/build/postalgo",
-
-        method: "POST",
-
-    data: {
-        "output": output,
-        "title": "analgo"
-    //         language: $("#languages").val(),
-    //         code: editor.getSession().getValue()
-         },
-
-         
-    })
-    console.log("bottom of functions")
+     
+})
+console.log("bottom of functions")
 }
-    </script>
-
-    <div class="bg-white output"></div>
-        </div>
-        {% include "./components/footer.html" %}
-        <script src="" async defer></script>
-       
-    <script src="{%  static 'js/lib/ace.js' %}"></script>
-    <script src="{%  static 'js/lib/theme-monokai.js' %}"></script>
-    <script src="{% static 'js/ide.js' %}"></script>
+</script>
     </body>
 </html>

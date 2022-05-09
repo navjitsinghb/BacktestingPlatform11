@@ -9,6 +9,7 @@ from pandas_datareader import data as pdr
 from build.models import Script
 import requests
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
@@ -24,6 +25,9 @@ def home(request):
     return render(request, 'index.html', context)
 
 #ggg
+
+
+@login_required(login_url='/user/login')
 @csrf_exempt
 def detail(request, id):
     detailStock = Stock.objects.get(id=id)
@@ -32,8 +36,8 @@ def detail(request, id):
     scripts = Script.objects.filter(owner=request.user)
     scriptsAmounts = scripts.count()
     print(scriptsAmounts)
-    mostRecentPrice = StockPrice.objects.filter(stock=detailStock).last()
-    print(mostRecentPrice.close)
+    mostRecentPrices = StockPrice.objects.filter(stock=detailStock)
+    print(mostRecentPrices)
     if (request.method == "POST"):
         BackTest(detailStock)
     context = {
@@ -41,7 +45,7 @@ def detail(request, id):
         "stockprices": stockprices,
         "scriptsAmount": scriptsAmounts,
         "scripts": scripts,
-        "mostRecent": mostRecentPrice
+        "prices": mostRecentPrices
     }
     return render(request, 'detailview.html', context)
 

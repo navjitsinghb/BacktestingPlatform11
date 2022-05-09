@@ -10,11 +10,13 @@ from stocks.models import Stock, StockPrice
 stockList = [
 {
     "companyName": "Tesla",
-    "ticker": "TSLA"
+    "ticker": "TSLA",
+    "logo": "tesla.png"
 },
 {
     "companyName": "Microsoft",
-    "ticker": "MSFT"
+    "ticker": "MSFT",
+    "logo": "microsoft.png"
 }
 ]
 
@@ -29,11 +31,14 @@ class Command(BaseCommand):
             start = dt.datetime(startyear, startmonth, startday)
             now = dt.datetime.now()
             df = pdr.get_data_yahoo(stock['ticker'], start, now)
+            closingPrice = None
             stockInstance = Stock.objects.create(
                 companyName=stock['companyName'],
-                ticker=stock['ticker']
+                ticker=stock['ticker'],
+                logo=stock['logo'],
+                mostRecentPrice=None
             )
-            stockInstance.save()
+            
             for row in df.index:
                 high = df["High"][row]
                 low = df["Low"][row]
@@ -45,8 +50,11 @@ class Command(BaseCommand):
                 year = date[0:4]
                 month = date[5:7]
                 day = date[8:10]
+                closingPrice = close
                 print("high: ",high," low: ",low," open: ",open," close: ",close," volume: ",volume
                 ," adjClose: ",adjclose, " year: ",year," month: ",month," day: ",day)
+
+                
                 StockPrice.objects.create(
                     stock=stockInstance,
                     open=open,
@@ -58,4 +66,6 @@ class Command(BaseCommand):
                     month=month,
                     year=year
                 )
+            stockInstance.mostRecentPrice = closingPrice
+            stockInstance.save()
             
