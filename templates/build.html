@@ -12,12 +12,12 @@
         <link rel="stylesheet" href="{% static 'css/editor.css' %}">
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     </head>
-    <body>
-        {% include "./components/navbar.html" %}
-        <div style="background-color: #131428; " class="h-screen"> 
+    <body class="">
+        <div style="background-color: #131428;  " class="min-h-screen"> 
+            {% include "./components/navbar.html" %}
     
     {% comment %} <div class="header"> Codeboard Online IDE </div> {% endcomment %}
-    <div style="background-color: #131428; " class="control-panel flex items-center justify-between p-4">
+    <div style="background-color: #131428; " class="control-panel   flex items-center justify-between p-4">
         <div>
             <p class="text-white">Code editor</p>
         </div>
@@ -65,9 +65,9 @@
 }
     </script>
 
-    <div class="bg-white output"></div>
+    {% comment %} <div class="bg-white output"></div> {% endcomment %}
+    {% include "./components/footer.html" %}
         </div>
-        {% include "./components/footer.html" %}
         <script src="" async defer></script>
        
     <script src="{%  static 'js/lib/ace.js' %}"></script>

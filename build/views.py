@@ -24,10 +24,16 @@ def postalgo(request):
     if (request.method == "POST"):
         code = request.POST.get('output')
         title = request.POST.get('title')
-
+        
         print(code)
+        if len(code) > 200:
+            snip = code[0: 199]
+        else:
+            snip = code
         try: 
-            Script.objects.create( owner = request.user,
+            Script.objects.create( 
+    owner = request.user,
+    snippet = snip,
     title = title,
     code = code)
         except Exception as e:

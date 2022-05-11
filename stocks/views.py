@@ -31,15 +31,19 @@ def home(request):
 @csrf_exempt
 def detail(request, id):
     detailStock = Stock.objects.get(id=id)
-    print(detailStock)
+    # print(detailStock)
     stockprices = StockPrice.objects.filter(stock=detailStock)
     scripts = Script.objects.filter(owner=request.user)
     scriptsAmounts = scripts.count()
-    print(scriptsAmounts)
+    # print(scriptsAmounts)
     mostRecentPrices = StockPrice.objects.filter(stock=detailStock)
-    print(mostRecentPrices)
+    # print(mostRecentPrices)
     if (request.method == "POST"):
-        BackTest(detailStock)
+        data = request.POST
+        print("this is the datare",data)
+        print(data["algoId"])
+        testAlgo = Script.objects.filter(id=data["algoId"])
+        BackTest(detailStock, testAlgo[0].code)
     context = {
         "stock": detailStock,
         "stockprices": stockprices,
@@ -50,108 +54,111 @@ def detail(request, id):
     return render(request, 'detailview.html', context)
 
 
-def BackTest(detailStock):
-    print(detailStock)
-    yf.pdr_override()
-    stock = detailStock.ticker
-    print(stock)
-    startyear = 2019
-    startmonth = 1
-    startday = 1
-    start = dt.datetime(startyear, startmonth, startday)
-    now = dt.datetime.now()
-    df = pdr.get_data_yahoo(stock, start, now)
-    emasUsed = [3, 5, 8, 10, 12, 15, 30, 35, 40, 45, 50, 60]
-    for x in emasUsed:
-        ema = x
-        df["Ema_"+str(ema)] = round(df.iloc[:,
-                                            4].ewm(span=ema, adjust=False).mean(), 2)
-    # print(df.tail())
-    pos = 0
-    num = 0
-    percentchange = []
-    for i in df.index:
-        cmin = min(df["Ema_3"][i], df["Ema_5"][i], df["Ema_8"][i],
-                   df["Ema_10"][i], df["Ema_12"][i], df["Ema_15"][i],)
-        cmax = max(df["Ema_30"][i], df["Ema_35"][i], df["Ema_40"]
-                   [i], df["Ema_45"][i], df["Ema_50"][i], df["Ema_60"][i],)
-        close = df["Adj Close"][i]
-        if(cmin > cmax):
-            print("Red White Blue")
-            if(pos == 0):
-                bp = close
-                pos = 1
-                print("Buying now at "+str(bp))
-        elif(cmin < cmax):
-            print("Blue White Red")
-            if(pos == 1):
-                pos = 0
-                sp = close
-                print("Selling now at "+str(sp))
-                pc = (sp/bp-1)*100
-                percentchange.append(pc)
-        if(num == df["Adj Close"].count()-1 and pos == 1):
-            pos = 0
-            sp = close
-            print("Selling now at "+str(sp))
-            pc = (sp/bp-1)*100
-            percentchange.append(pc)
-    num += 1
+def BackTest(detailStock, algo):
+    exec(algo)
+    
 
-    print(percentchange)
-    gains = 0
-    ng = 0
-    losses = 0
-    nl = 0
-    totalR = 1
+# # print(detailStock)
+#     yf.pdr_override()
+#     stock = detailStock.ticker
+#     # print(stock)
+#     startyear = 2019
+#     startmonth = 1
+#     startday = 1
+#     start = dt.datetime(startyear, startmonth, startday)
+#     now = dt.datetime.now()
+#     df = pdr.get_data_yahoo(stock, start, now)
+#     emasUsed = [3, 5, 8, 10, 12, 15, 30, 35, 40, 45, 50, 60]
+#     for x in emasUsed:
+#         ema = x
+#         df["Ema_"+str(ema)] = round(df.iloc[:,
+#                                             4].ewm(span=ema, adjust=False).mean(), 2)
+#     # print(df.tail())
+#     pos = 0
+#     num = 0
+#     percentchange = []
+#     for i in df.index:
+#         cmin = min(df["Ema_3"][i], df["Ema_5"][i], df["Ema_8"][i],
+#                    df["Ema_10"][i], df["Ema_12"][i], df["Ema_15"][i],)
+#         cmax = max(df["Ema_30"][i], df["Ema_35"][i], df["Ema_40"]
+#                    [i], df["Ema_45"][i], df["Ema_50"][i], df["Ema_60"][i],)
+#         close = df["Adj Close"][i]
+#         if(cmin > cmax):
+#             # print("Red White Blue")
+#             if(pos == 0):
+#                 bp = close
+#                 pos = 1
+#                 # print("Buying now at "+str(bp))
+#         elif(cmin < cmax):
+#             # print("Blue White Red")
+#             if(pos == 1):
+#                 pos = 0
+#                 sp = close
+#                 # print("Selling now at "+str(sp))
+#                 pc = (sp/bp-1)*100
+#                 percentchange.append(pc)
+#         if(num == df["Adj Close"].count()-1 and pos == 1):
+#             pos = 0
+#             sp = close
+#             # print("Selling now at "+str(sp))
+#             pc = (sp/bp-1)*100
+#             percentchange.append(pc)
+#     num += 1
 
-    for i in percentchange:
-        if(i > 0):
-            gains += i
-            ng += 1
-        else:
-            losses += i
-            nl += 1
-        totalR = totalR*((i/100)+1)
+#     # print(percentchange)
+#     gains = 0
+#     ng = 0
+#     losses = 0
+#     nl = 0
+#     totalR = 1
 
-    totalR = round((totalR-1)*100, 2)
+#     for i in percentchange:
+#         if(i > 0):
+#             gains += i
+#             ng += 1
+#         else:
+#             losses += i
+#             nl += 1
+#         totalR = totalR*((i/100)+1)
 
-    if(ng > 0):
-        avgGain = gains/ng
-        maxR = str(max(percentchange))
-    else:
-        avgGain = 0
-        maxR = "undefined"
+#     totalR = round((totalR-1)*100, 2)
 
-    if(nl > 0):
-        avgLoss = losses/nl
-        maxL = str(min(percentchange))
-        ratio = str(-avgGain/avgLoss)
-    else:
-        avgLoss = 0
-        maxL = "undefined"
-        ratio = "inf"
+#     if(ng > 0):
+#         avgGain = gains/ng
+#         maxR = str(max(percentchange))
+#     else:
+#         avgGain = 0
+#         maxR = "undefined"
 
-    if(ng > 0 or nl > 0):
-        battingAvg = ng/(ng+nl)
-    else:
-        battingAvg = 0
+#     if(nl > 0):
+#         avgLoss = losses/nl
+#         maxL = str(min(percentchange))
+#         ratio = str(-avgGain/avgLoss)
+#     else:
+#         avgLoss = 0
+#         maxL = "undefined"
+#         ratio = "inf"
 
-    print()
-    print("Results for " + stock + " going back to " +
-          str(df.index[0])+", Sample size: "+str(ng+nl)+" trades")
-    print("EMAs used: "+str(emasUsed))
-    print("Batting Avg: " + str(battingAvg))
-    print("Gain/loss ratio: " + ratio)
-    print("Average Gain: " + str(avgGain))
-    print("Average Loss: " + str(avgLoss))
-    print("Max Return: " + maxR)
-    print("Max Loss: " + maxL)
-    print("Total return over "+str(ng+nl) + " trades: " + str(totalR)+"%")
-    #print("Example return Simulating "+str(n)+ " trades: "+ str(nReturn)+"%" )
-    print()
-    testContext = {
-        "ResultStatement": "Results for " + stock + " going back to " + str(df.index[0])+", Sample size: "+str(ng+nl)+" trades",
+#     if(ng > 0 or nl > 0):
+#         battingAvg = ng/(ng+nl)
+#     else:
+#         battingAvg = 0
 
-    }
-    return testContext
+#     print()
+#     print("Results for " + stock + " going back to " +
+#           str(df.index[0])+", Sample size: "+str(ng+nl)+" trades")
+#     print("EMAs used: "+str(emasUsed))
+#     print("Batting Avg: " + str(battingAvg))
+#     print("Gain/loss ratio: " + ratio)
+#     print("Average Gain: " + str(avgGain))
+#     print("Average Loss: " + str(avgLoss))
+#     print("Max Return: " + maxR)
+#     print("Max Loss: " + maxL)
+#     print("Total return over "+str(ng+nl) + " trades: " + str(totalR)+"%")
+#     #print("Example return Simulating "+str(n)+ " trades: "+ str(nReturn)+"%" )
+#     print()
+#     testContext = {
+#         "ResultStatement": "Results for " + stock + " going back to " + str(df.index[0])+", Sample size: "+str(ng+nl)+" trades",
+
+#     }
+#     return testContext
