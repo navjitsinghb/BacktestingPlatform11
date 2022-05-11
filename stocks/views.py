@@ -55,21 +55,27 @@ def detail(request, id):
 
 
 def BackTest(detailStock, algo):
+    print(algo)
     exec(algo)
     
+    # testContext = {
+    #     "ResultStatement": "Results for " + stock + " going back to " + str(df.index[0])+", Sample size: "+str(ng+nl)+" trades",
 
-# # print(detailStock)
-#     yf.pdr_override()
-#     stock = detailStock.ticker
-#     # print(stock)
-#     startyear = 2019
-#     startmonth = 1
-#     startday = 1
-#     start = dt.datetime(startyear, startmonth, startday)
-#     now = dt.datetime.now()
-#     df = pdr.get_data_yahoo(stock, start, now)
-#     emasUsed = [3, 5, 8, 10, 12, 15, 30, 35, 40, 45, 50, 60]
-#     for x in emasUsed:
+    # }
+    # return testContext
+
+
+# yf.pdr_override()
+# stock = detailStock.ticker
+# # print(stock)
+# startyear = 2019
+# startmonth = 1
+# startday = 1
+# start = dt.datetime(startyear, startmonth, startday)
+# now = dt.datetime.now()
+#  df = pdr.get_data_yahoo(stock, start, now)
+#   emasUsed = [3, 5, 8, 10, 12, 15, 30, 35, 40, 45, 50, 60]
+#    for x in emasUsed:
 #         ema = x
 #         df["Ema_"+str(ema)] = round(df.iloc[:,
 #                                             4].ewm(span=ema, adjust=False).mean(), 2)
@@ -157,8 +163,3 @@ def BackTest(detailStock, algo):
 #     print("Total return over "+str(ng+nl) + " trades: " + str(totalR)+"%")
 #     #print("Example return Simulating "+str(n)+ " trades: "+ str(nReturn)+"%" )
 #     print()
-#     testContext = {
-#         "ResultStatement": "Results for " + stock + " going back to " + str(df.index[0])+", Sample size: "+str(ng+nl)+" trades",
-
-#     }
-#     return testContext

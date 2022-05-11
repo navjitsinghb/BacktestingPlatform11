@@ -7,10 +7,6 @@ def build(request):
     context = {}
     return render(request, "build.html", context)
 
-
-
-
-
 @login_required(login_url='/user/login')
 def myalgos(request):
     scripts = Script.objects.filter(owner=request.user)
@@ -24,8 +20,10 @@ def postalgo(request):
     if (request.method == "POST"):
         code = request.POST.get('output')
         title = request.POST.get('title')
-        
         print(code)
+        print(code)
+        for c in code:
+            print(c)
         if len(code) > 200:
             snip = code[0: 199]
         else:
