@@ -38,12 +38,6 @@ def detail(request, id):
     # print(scriptsAmounts)
     mostRecentPrices = StockPrice.objects.filter(stock=detailStock)
     # print(mostRecentPrices)
-    if (request.method == "POST"):
-        data = request.POST
-        print("this is the datare",data)
-        print(data["algoId"])
-        testAlgo = Script.objects.filter(id=data["algoId"])
-        BackTest(detailStock, testAlgo[0].code)
     context = {
         "stock": detailStock,
         "stockprices": stockprices,
@@ -51,10 +45,27 @@ def detail(request, id):
         "scripts": scripts,
         "prices": mostRecentPrices
     }
+    if (request.method == "POST"):
+        data = request.POST
+        print("this is the datare",data)
+        print(data["algoId"])
+        testAlgo = Script.objects.filter(id=data["algoId"])
+        info = BackTest(detailStock, testAlgo[0].code)
+        contexta = {
+            "stock": detailStock,
+            "stockprices": stockprices,
+            "scriptsAmount": scriptsAmounts,
+            "scripts": scripts,
+            "prices": mostRecentPrices,
+            "stockResponse": "average calue"
+        }
+        print("grocories")
+        return render(request, "detailview.html", contexta)
     return render(request, 'detailview.html', context)
 
 
-def BackTest(detailStock, algo):
+def BackTest(detailStock, algo, balance):
+    
     print(algo)
     exec(algo)
     

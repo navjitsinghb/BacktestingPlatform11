@@ -47,7 +47,11 @@
 </div>
 
 <div  class="flex flex-col justify-center ">
-  
+
+  {% if stockResponse %}
+  <p class="text-white font-bold mx-40">gwgwegewgwe</p>
+  <p class="text-white font-bold mx-40">{{stockResponse}} gwegwegweg</p>
+  {% endif %}
 
 <div id="my_dataviz"></div>  
   <script>
@@ -59,11 +63,11 @@
       
 		</div>
     <div class="flex justify-between"> 
-      <ul class="flex">
+      {% comment %} <ul class="flex">
         <li class="text-white mx-2 cursor-pointer">1M</li>
         <li class="text-white mx-2 cursor-pointer">1Y</li>
         <li class="text-white mx-2 cursor-pointer">2Y</li>
-      </ul>
+      </ul> {% endcomment %}
     
     </div>
     </div>
@@ -300,14 +304,13 @@ const svg = d3.select("#my_dataviz")
     return false; //<---- move it here
 });
    }
-}
+location.reload();
+  
+  }
 
 
 
-      
 
-
-{% comment %} toggle model function   {% endcomment %}
  function toggleModal(modalID){
     document.getElementById(modalID).classList.toggle("hidden");
     document.getElementById(modalID + "-backdrop").classList.toggle("hidden");
@@ -318,7 +321,9 @@ const svg = d3.select("#my_dataviz")
 
 
     </script>
-      
+<script>
+  console.log("word in fornt",{{stockResponse}})
+</script>      
 	</body>
 </html>
 

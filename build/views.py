@@ -20,10 +20,6 @@ def postalgo(request):
     if (request.method == "POST"):
         code = request.POST.get('output')
         title = request.POST.get('title')
-        print(code)
-        print(code)
-        for c in code:
-            print(c)
         if len(code) > 200:
             snip = code[0: 199]
         else:
